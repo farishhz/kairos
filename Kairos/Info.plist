@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>LSUIElement</key>
+	<true/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Poppins-Regular.ttf</string>
+		<string>Poppins-Medium.ttf</string>
+		<string>Poppins-SemiBold.ttf</string>
+		<string>Poppins-Bold.ttf</string>
+	</array>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>Kairos needs access to control your web browsers to track which websites you visit for accurate time tracking and productivity insights.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Kairos monitors application activity during your focus sessions.</string>
+	<key>SUEnableInstallerLauncherService</key>
+	<true/>
+	<key>SUFeedURL</key>
+	<string>https://raw.githubusercontent.com/kairos-app/pomodoro/main/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>gVDoWQzdh4+9rmj9AsGWxmm1gk58fHaKyXg+N5Uu+kg=</string>
+</dict>
+</plist>

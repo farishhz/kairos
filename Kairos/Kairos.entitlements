@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.apple.security.files.user-selected.read-write</key>
+	<true/>
+	<key>com.apple.security.temporary-exception.apple-events</key>
+	<array>
+		<string>com.apple.Safari</string>
+		<string>com.google.Chrome</string>
+		<string>com.microsoft.edgemac</string>
+		<string>company.thebrowser.Browser</string>
+		<string>com.brave.Browser</string>
+		<string>com.vivaldi.Vivaldi</string>
+		<string>com.operasoftware.Opera</string>
+		<string>org.mozilla.firefox</string>
+		<string>com.apple.systemevents</string>
+	</array>
+	<key>com.apple.security.temporary-exception.files.home-relative-path.read-only</key>
+	<array>
+		<string>/Library/</string>
+	</array>
+</dict>
+</plist>

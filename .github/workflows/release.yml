@@ -1,0 +1,94 @@
+name: Build and Release macOS App
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build & Publish Release
+    runs-on: macos-15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Select Xcode version
+        run: sudo xcode-select -s /Applications/Xcode_16.2.app
+
+      - name: Build and Archive App (Unsigned)
+        run: |
+          xcodebuild archive \
+            -project kairos.xcodeproj \
+            -scheme Kairos \
+            -configuration Release \
+            -archivePath build/Kairos.xcarchive \
+            -skipPackagePluginValidation \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY=""
+
+      - name: Package into DMG
+        run: |
+          mkdir -p build/dmg
+          cp -r build/Kairos.xcarchive/Products/Applications/Kairos.app build/dmg/
+          
+          # Create symlink to /Applications for a clean installer experience
+          ln -s /Applications build/dmg/Applications
+          
+          # Create the DMG image
+          hdiutil create -volname "Kairos" -srcfolder build/dmg -ov -format UDZO build/kairos-mac-universal.dmg
+          
+          # Determine version name for file output
+          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+            VERSION_NAME="${{ github.ref_name }}"
+          else
+            VERSION_NAME="latest"
+          fi
+          mv build/kairos-mac-universal.dmg build/kairos-$VERSION_NAME-mac-universal.dmg
+
+      - name: Create GitHub Release and Upload Assets
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: build/kairos-*.dmg
+          draft: false
+          prerelease: false
+          body: |
+            ### Downloads
+            | Platform | Architecture | Download |
+            | --- | --- | --- |
+            | macOS | Universal (Apple Silicon & Intel) | [kairos-${{ github.ref_name }}-mac-universal.dmg](https://github.com/farishhz/kairos/releases/download/${{ github.ref_name }}/kairos-${{ github.ref_name }}-mac-universal.dmg) |
+
+            ### Installation
+            1. Download the `.dmg` file (works on any Mac — Apple Silicon or Intel).
+            2. Open the DMG and drag **Kairos** to Applications.
+            3. **First Launch** — Choose one method (recommended):
+               - **Option A: Right-Click Method (Easiest)**
+                 Right-click the app → Open → Click **Open** in the dialog.
+               - **Option B: Terminal Method (One command, no dialogs)**
+                 `xattr -d com.apple.quarantine /Applications/Kairos.app`
+               - *Optional: Jika macOS tetap memblokir aplikasi, buka **System Settings → Privacy & Security** dan klik **Open Anyway** untuk Kairos.*
+            
+            > **Note:** Ini adalah aplikasi indie yang ditandatangani secara ad-hoc. macOS akan memunculkan peringatan keamanan karena aplikasi ini tidak didaftarkan melalui Apple Developer Program berbayar ($99/tahun). Aplikasi ini sepenuhnya aman dan open source.
+
+            ### Homebrew Install
+            ```sh
+            brew tap farishhz/kairos
+            brew install --cask kairos
+            ```
+
+            ### What's New in ${{ github.ref_name }}
+            - Renamed from Dzenn to Kairos
+            - Browser activity tracking (Safari, Chrome, Arc, Edge, Firefox, Opera, Vivaldi, Brave)
+            - Analytics dashboard with active time, hourly timeline, and usage pie chart
+            - Focus session mode enabled by default
+            - UI improvements: Poppins font, heatmap layout, floating timer
+          generate_release_notes: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

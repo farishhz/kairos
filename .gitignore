@@ -1,0 +1,48 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode
+DerivedData/
+build/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xcuserstate
+*.xcuserdata/
+*.moved-aside
+*.xccheckout
+*.xcscmblueprint
+
+# SwiftPM
+.build/
+.swiftpm/
+Package.resolved
+
+# Carthage
+Carthage/Build/
+
+# CocoaPods
+Pods/
+
+# IDEs
+.idea/
+.vscode/
+
+# Logs
+*.log
+
+# Local/notes
+TODO.md
+release.md
+relase-1-2.md
+
+ANALYTIC.md
+
+# AI Agent Configuration
+.agents/
+
+# Marketing Website
+website/
